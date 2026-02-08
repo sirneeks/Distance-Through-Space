@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Travel Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #2d1b4e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00d4ff, #7b2ff7, #ff61d8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #a8b2d1;
+            margin-top: 10px;
+        }
+
+        .input-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #a8b2d1;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .unit-toggle {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .unit-btn {
+            padding: 12px 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .unit-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .unit-btn.active {
+            background: linear-gradient(45deg, #00d4ff, #7b2ff7);
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00d4ff, #7b2ff7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.5);
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .result-detail {
+            font-size: 0.95rem;
+            color: #a8b2d1;
+            line-height: 1.6;
+        }
+
+        .comparison-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-item {
+            padding: 12px 15px;
+            background: rgba(0, 212, 255, 0.08);
+            border-left: 3px solid #00d4ff;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #e0e7ff;
+        }
+
+        .comparison-item strong {
+            color: #00d4ff;
+        }
+
+        .total-distance {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 47, 247, 0.1));
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            padding: 35px;
+            text-align: center;
+        }
+
+        .total-distance .result-title {
+            font-size: 1.5rem;
+            justify-content: center;
+        }
+
+        .total-distance .result-value {
+            font-size: 2.8rem;
+            background: linear-gradient(45deg, #00d4ff, #7b2ff7, #ff61d8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .result-value {
+                font-size: 1.5rem;
+            }
+
+            .total-distance .result-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌌 Space Travel Calculator</h1>
+            <p class="subtitle">Discover how far you've traveled through the cosmos ever since you were born</p>
+        </header>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="birthday">Enter Your Birthday:</label>
+                <input type="date" id="birthday" max="">
+            </div>
+
+            <div class="input-group">
+                <label>Distance Unit:</label>
+                <div class="unit-toggle">
+                    <button class="unit-btn active" data-unit="km">Kilometers</button>
+                    <button class="unit-btn" data-unit="miles">Miles</button>
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateDistance()">Calculate My Space Journey</button>
+        </div>
+
+        <div class="results" id="results">
+            <div class="result-card">
+                <div class="result-title">
+                    <span class="icon">🌍</span>
+                    Earth's Rotation
+                </div>
+                <div class="result-value" id="rotationDistance"></div>
+                <div class="result-detail" id="rotationDetail"></div>
+                <div class="comparison-section" id="rotationComparisons"></div>
+            </div>
+
+            <div class="result-card">
+                <div class="result-title">
+                    <span class="icon">☀️</span>
+                    Orbit Around the Sun
+                </div>
+                <div class="result-value" id="orbitDistance"></div>
+                <div class="result-detail" id="orbitDetail"></div>
+                <div class="comparison-section" id="orbitComparisons"></div>
+            </div>
+
+            <div class="result-card">
+                <div class="result-title">
+                    <span class="icon">🌌</span>
+                    Milky Way Movement
+                </div>
+                <div class="result-value" id="galaxyDistance"></div>
+                <div class="result-detail" id="galaxyDetail"></div>
+                <div class="comparison-section" id="galaxyComparisons"></div>
+            </div>
+
+            <div class="result-card total-distance">
+                <div class="result-title">
+                    <span class="icon">🚀</span>
+                    Total Distance Traveled
+                </div>
+                <div class="result-value" id="totalDistance"></div>
+                <div class="result-detail">Your incredible journey through space since birth!</div>
+                <div class="comparison-section" id="totalComparisons"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set max date to today
+        document.getElementById('birthday').max = new Date().toISOString().split('T')[0];
+
+        // Unit toggle functionality
+        document.querySelectorAll('.unit-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        function calculateDistance() {
+            const birthdayInput = document.getElementById('birthday').value;
+            
+            if (!birthdayInput) {
+                alert('Please enter your birthday!');
+                return;
+            }
+
+            const birthday = new Date(birthdayInput);
+            const today = new Date();
+            
+            // Calculate time difference
+            const timeDiff = today - birthday;
+            const daysPassed = timeDiff / (1000 * 60 * 60 * 24);
+            const yearsPassed = daysPassed / 365.25;
+
+            // Get selected unit
+            const unit = document.querySelector('.unit-btn.active').dataset.unit;
+            const isKm = unit === 'km';
+
+            // Constants (in kilometers)
+            const earthCircumference = 40075; // km at equator
+            const earthOrbitCircumference = 940000000; // km (Earth's orbit around sun)
+            const milkyWaySpeed = 2100000; // km per day (solar system's movement through galaxy)
+
+            // Calculations
+            const rotationDistance = daysPassed * earthCircumference;
+            const orbitDistance = yearsPassed * earthOrbitCircumference;
+            const galaxyDistance = daysPassed * milkyWaySpeed;
+            const totalDistance = rotationDistance + orbitDistance + galaxyDistance;
+
+            // Convert to miles if needed
+            const conversionFactor = isKm ? 1 : 0.621371;
+            const unitLabel = isKm ? 'km' : 'miles';
+
+            // Format numbers with commas
+            function formatNumber(num) {
+                return Math.round(num * conversionFactor).toLocaleString();
+            }
+
+            // Update results
+            document.getElementById('rotationDistance').textContent = formatNumber(rotationDistance) + ' ' + unitLabel;
+            document.getElementById('rotationDetail').textContent = 
+                `Earth has rotated ${Math.round(daysPassed).toLocaleString()} times on its axis since you were born. That's a ${formatNumber(earthCircumference)} ${unitLabel} journey each day!`;
+
+            document.getElementById('orbitDistance').textContent = formatNumber(orbitDistance) + ' ' + unitLabel;
+            document.getElementById('orbitDetail').textContent = 
+                `You've completed ${yearsPassed.toFixed(2)} orbits around the Sun. Earth travels about ${formatNumber(earthOrbitCircumference)} ${unitLabel} per orbit!`;
+
+            document.getElementById('galaxyDistance').textContent = formatNumber(galaxyDistance) + ' ' + unitLabel;
+            document.getElementById('galaxyDetail').textContent = 
+                `Our solar system moves through the Milky Way at about ${formatNumber(milkyWaySpeed)} ${unitLabel} per day. That's approximately ${formatNumber(milkyWaySpeed * 365.25)} ${unitLabel} per year!`;
+
+            document.getElementById('totalDistance').textContent = formatNumber(totalDistance) + ' ' + unitLabel;
+
+            // Show results with animation
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // Generate comparisons
+            generateComparisons(rotationDistance, orbitDistance, galaxyDistance, totalDistance, isKm);
+        }
+
+        function generateComparisons(rotationDistance, orbitDistance, galaxyDistance, totalDistance, isKm) {
+            const unitLabel = isKm ? 'km' : 'miles';
+            
+            // Comparison constants (all in km)
+            const comparisons = {
+                rotation: [
+                    { value: 40075, label: 'times around Earth\'s equator', emoji: '🌍' },
+                    { value: 384400, label: 'round trips to the Moon', emoji: '🌙' },
+                    { value: 0.1097, label: 'American football fields', emoji: '🏈' }
+                ],
+                orbit: [
+                    { value: 384400, label: 'one-way trips from Earth to the Moon', emoji: '🚀' },
+                    { value: 149600000, label: 'trips from Earth to the Sun', emoji: '☀️' },
+                    { value: 299792, label: 'light-seconds', emoji: '⚡' }
+                ],
+                galaxy: [
+                    { value: 4500000000, label: 'trips to Neptune', emoji: '🔵' },
+                    { value: 5900000000, label: 'trips to Pluto', emoji: '🪐' },
+                    { value: 9460730472580.8, label: 'light-years', emoji: '✨' }
+                ],
+                total: [
+                    { value: 12000000000, label: 'times across the solar system (to Pluto)', emoji: '🌌' },
+                    { value: 40208000000000, label: 'of the distance to Proxima Centauri', emoji: '⭐' },
+                    { value: 946073047258080, label: 'of the distance across the Milky Way', emoji: '🌠' }
+                ]
+            };
+
+            function createComparisonHTML(distance, compData) {
+                const result = distance / compData.value;
+                let text = '';
+                
+                if (result >= 1) {
+                    text = `${compData.emoji} <strong>${result.toFixed(2).toLocaleString()}</strong> ${compData.label}`;
+                } else if (result >= 0.01) {
+                    const percentage = (result * 100).toFixed(2);
+                    text = `${compData.emoji} <strong>${percentage}%</strong> ${compData.label}`;
+                } else if (result >= 0.0001) {
+                    const percentage = (result * 100).toFixed(4);
+                    text = `${compData.emoji} <strong>${percentage}%</strong> ${compData.label}`;
+                } else {
+                    const percentage = (result * 100).toExponential(2);
+                    text = `${compData.emoji} <strong>${percentage}%</strong> ${compData.label}`;
+                }
+                
+                return `<div class="comparison-item">${text}</div>`;
+            }
+
+            // Generate rotation comparisons
+            let rotationHTML = '';
+            comparisons.rotation.forEach(comp => {
+                rotationHTML += createComparisonHTML(rotationDistance, comp);
+            });
+            document.getElementById('rotationComparisons').innerHTML = rotationHTML;
+
+            // Generate orbit comparisons
+            let orbitHTML = '';
+            comparisons.orbit.forEach(comp => {
+                orbitHTML += createComparisonHTML(orbitDistance, comp);
+            });
+            document.getElementById('orbitComparisons').innerHTML = orbitHTML;
+
+            // Generate galaxy comparisons
+            let galaxyHTML = '';
+            comparisons.galaxy.forEach(comp => {
+                galaxyHTML += createComparisonHTML(galaxyDistance, comp);
+            });
+            document.getElementById('galaxyComparisons').innerHTML = galaxyHTML;
+
+            // Generate total comparisons
+            let totalHTML = '';
+            comparisons.total.forEach(comp => {
+                totalHTML += createComparisonHTML(totalDistance, comp);
+            });
+            document.getElementById('totalComparisons').innerHTML = totalHTML;
+        }
+    </script>
+</body>
+</html>
